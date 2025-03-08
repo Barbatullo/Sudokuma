@@ -1,0 +1,154 @@
+<html>
+    <body onkeydown="ecco(event)">  <!-- OH MA COSA MI GUARDI IL CODICE?! FATTI I CAZZI TUOI-->
+        <div id="imo" style="visibility:hidden;position:absolute;top:5%;left:30%;">AVVISAMI IL GIORNIO PRIMA DI ANDARCI!</div>
+        <div id="im" style="visibility:hidden;">Foto della Pollet, immaginatela.png</div>
+        <table id="tab" style="border-collapse:collapse;border:3px solid black;width:40%;height:80%;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);"></table>
+        <table id="hh" style="visibility:hidden;position:absolute;font-size:200%;top:93%;left:30%;width:40%;height:5%">
+            <tr>
+                <td style="background-color:crimson;color:crimson;">.</td>
+                <td style="background-color:red;color:red;">.</td>
+                <td style="text-align:center;">.</td>
+                <td style="background-color:coral;color:coral;">.</td>
+                <td style="background-color:orange;color:orange;">.</td>
+                <td style="background-color:gold;color:gold;">.</td>
+                <td style="background-color:khaki;color:khaki;">.</td>
+                <td style="background-color:limegreen;color:limegreen;">.</td>
+                <td style="background-color:green;color:green;">.</td>
+                <td style="text-align:center;">,</td>
+                <td style="background-color:teal;color:teal;">.</td>
+                <td style="text-align:center">.</td>
+                <td style="background-color:dodgerblue;color:dodgerblue;">.</td>
+                <td style="background-color:blue;color:blue;">.</td>
+                <td style="background-color:indigo;color:indigo;">.</td>
+                <td style="background-color:slateblue;color:slateblue;">.</td>
+                <td style="background-color:plum;color:plum;">.</td>
+                <td style="background-color:violet;color:violet;">.</td>
+            </tr>
+        </table>
+        <script>
+            let t="",b=tab,c=0;
+            let sudoku = [
+            [5, 3, "", "", 7, "", "", "", ""],
+            [6, "", "", 1, 9, 5, "", "", ""],
+            ["", 9, 8, "", "", "", "", 6, ""],
+            [8, "", "", "", 6, "", "", "", 3],
+            [4, "", "", 8, "", 3, "", "", 1],
+            [7, "", "", "", 2, "", "", "", 6],
+            ["", 6, "", "", "", "", 2, 8, ""],
+            ["", "", "", 4, 1, 9, "", "", 5],
+            ["", "", "", "", 8, "", "", 7, 9]];
+
+            for (let i=0;i<9;++i,t+="</tr>"){
+                t+="<tr>";
+                for (let j=0;j<9;j++){
+                    if ((i==2 || i==5)&&(j==3||j==6)){
+                        t+="<td id='"+(j+i*9)+"' onclick='fai(this)' style='text-align:center;border:1px solid black;border-bottom-width:3px;border-left-width:3px;'>"+sudoku[i][j]+"</td>"
+                    }
+                    else if (i==2 || i==5){
+                        t+="<td id='"+(j+i*9)+"' onclick='fai(this)' style='text-align:center;border:1px solid black;border-bottom-width:3px'>"+sudoku[i][j]+"</td>"
+                    }
+                    else if (j==3 || j==6){
+                        t+="<td id='"+(j+i*9)+"' onclick='fai(this)' style='text-align:center;border:1px solid black;border-left-width:3px'>"+sudoku[i][j]+"</td>"
+                    }
+                    else{
+                        t+="<td id='"+(j+i*9)+"' onclick='fai(this)' style='text-align:center;border:1px solid black'>"+sudoku[i][j]+"</td>"
+                    }
+                }
+            }
+            function fai(a){
+                if (a.style.backgroundColor!="yellow"){
+                    b.style.backgroundColor="white";
+                    b=a;
+                    a.style.backgroundColor="hotpink";
+                }
+            }
+            function ecco(event){
+                for (i=0;i<81;i++){
+                    if (document.getElementById(i).style.backgroundColor=="hotpink"){
+                        a=document.getElementById(i);
+                        let g=a.innerHTML;
+                        if (a.style.backgroundColor=="hotpink"&&(event.key=="Backspace"||event.key=="1"||event.key=="2"||event.key=="3"||event.key=="4"||event.key=="5"||event.key=="6"||event.key=="7"||event.key=="8"||event.key=="9")){
+                            a.innerHTML=parseInt(event.key);
+                            sudoku[Math.floor(parseInt(a.id)/9)][parseInt(a.id)-Math.floor(parseInt(a.id)/9)*9]=parseInt(event.key);
+                            a.style.backgroundColor="white";
+                            if (g==""){
+                                c+=1
+                            }
+                            if (event.key=="Backspace"){
+                                a.innerHTML="";
+                                c-=1;
+                            }
+                            let a1=true;
+                            if (c>=51){
+                                let sudoku1=new Array(9),sudoku2=new Array(9);
+                                for (j=0;j<81;j++){
+                                    if (sudoku[Math.floor(j/9)].filter(el => el === (j+1)-Math.floor(j/9)*9).length!=1){
+                                        a1=false;
+                                    }
+                                }
+                                for (k=0;k<9;k++){
+                                    sudoku1[k]=new Array(9);
+                                    for (let h=0;h<9;h++){
+                                        sudoku1[k][h]=sudoku[h][k];
+                                    }
+                                }
+                                for (j=0;j<81;j++){
+                                    if (sudoku1[Math.floor(j/9)].filter(el => el === (j+1)-Math.floor(j/9)*9).length!=1){
+                                        a1=false;
+                                    }
+                                }
+                                for (k=0;k<9;k++){
+                                    sudoku2[k]=new Array(9);
+                                }
+                                for (f=0;f<3;f++){
+                                    for (h=0;h<3;h++){
+                                        for (k=0;k<3;k++){
+                                            for (j=0;j<3;j++){
+                                                sudoku2[f+h*3][k+j*3]=sudoku[f*3+k][h*3+j]
+                                            }
+                                        }
+                                    }
+                                }
+                                for (j=0;j<81;j++){
+                                    if (sudoku2[Math.floor(j/9)].filter(el => el === (j+1)-Math.floor(j/9)*9).length!=1){
+                                        a1=false;
+                                    }
+                                }
+                                if (a1){
+                                    imo.style.visibility="visible";
+                                    im.style.visibility="visible";
+                                    hh.style.visibility="visible";
+                                    document.getElementById(2).style.backgroundColor="crimson";
+                                    document.getElementById(16).style.backgroundColor="red ";
+                                    document.getElementById(1).style.backgroundColor="coral";
+                                    document.getElementById(18).style.backgroundColor="orange ";
+                                    document.getElementById(28).style.backgroundColor="gold";
+                                    document.getElementById(32).style.backgroundColor="khaki ";
+                                    document.getElementById(40).style.backgroundColor="limegreen";
+                                    document.getElementById(42).style.backgroundColor="green";
+                                    document.getElementById(51).style.backgroundColor="teal ";
+                                    document.getElementById(73).style.backgroundColor="dodgerblue";
+                                    document.getElementById(55).style.backgroundColor="blue";
+                                    document.getElementById(71).style.backgroundColor="indigo ";
+                                    document.getElementById(35).style.backgroundColor="slateblue ";
+                                    document.getElementById(76).style.backgroundColor="plum";
+                                    document.getElementById(79).style.backgroundColor="violet ";
+                                }
+                            
+                            }
+                        }
+                        break
+                    }
+                }
+            }
+            tab.innerHTML=t;
+            for (i=0;i<9;i++){
+                for (j=0;j<9;++j){
+                    if (sudoku[i][j]!=""){
+                        document.getElementById(j+i*9).style.backgroundColor="yellow";
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
